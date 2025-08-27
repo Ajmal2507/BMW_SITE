@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>BMW | Ultra Smooth Scroll Experience</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     * {
       margin: 0;
@@ -17,10 +17,10 @@
       background: #0a0a0a;
       color: #fff;
       overflow-x: hidden;
-      height: 700vh; /* Increased scroll space to push content far down */
+      height: 700vh; /* Scroll space for video + content */
+      -webkit-overflow-scrolling: touch; /* Smooth native scrolling on iOS */
     }
     
-    /* Header styling */
     .header {
       position: fixed;
       top: 0;
@@ -34,7 +34,6 @@
       background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
       transition: background 0.3s ease, padding 0.3s ease;
     }
-    
     .header.scrolled {
       background: rgba(0, 0, 0, 0.95);
       padding: 16px 40px;
@@ -46,35 +45,30 @@
       color: #fff;
       letter-spacing: 1px;
     }
-    
     .logo span {
       color: #0066b3;
     }
-    
     .nav-links {
       display: flex;
       gap: 32px;
     }
-    
     .nav-links a {
       color: #fff;
       text-decoration: none;
       font-weight: 500;
       transition: color 0.3s ease;
     }
-    
     .nav-links a:hover {
       color: #0066b3;
     }
     
-    /* Video container */
     .video-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      overflow: hidden; /* Hide parts of video that overflow */
+      overflow: hidden;
       background: #000;
       z-index: 1;
     }
@@ -87,10 +81,10 @@
       min-height: 100vw;
       width: auto;
       height: auto;
-      transform: translateX(-50%) translateY(-50%) rotate(270deg);
+      transform: translate(-50%, -50%) rotate(270deg);
+      max-width: none;
     }
     
-    /* Progress indicator */
     .progress-container {
       position: fixed;
       bottom: 40px;
@@ -111,13 +105,12 @@
       background: linear-gradient(90deg, #0066b3, #00a8ff);
       border-radius: 4px;
       box-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
-      transform: scaleX(0); /* Animate transform instead of width */
-      transform-origin: left; /* Animate from the left */
-      transition: transform 0.1s linear; /* Use linear since JS handles easing */
-      will-change: transform; /* Hint to the browser for optimization */
+      transform: scaleX(0);
+      transform-origin: left;
+      will-change: transform;
+      transition: transform 0.1s linear;
     }
     
-    /* Time display */
     .time-display {
       position: fixed;
       top: 30px;
@@ -134,15 +127,16 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      user-select: none;
     }
     
-    /* Content sections */
     .content-section {
       position: relative;
       z-index: 20;
       padding: 60px 10%;
-      margin-top: 300vh; /* Pushed further down to ensure video is fully seen first */
+      margin-top: 300vh; /* Keep content below video section */
       background: #0a0a0a;
+      transition: opacity 0.5s ease;
     }
     
     .section {
@@ -151,7 +145,6 @@
       transform: translateY(50px);
       transition: opacity 1s ease, transform 1s ease;
     }
-    
     .section.visible {
       opacity: 1;
       transform: translateY(0);
@@ -162,7 +155,6 @@
       margin-bottom: 24px;
       color: #0066b3;
     }
-    
     .section p {
       font-size: 18px;
       line-height: 1.6;
@@ -204,7 +196,6 @@
       color: #aaa;
     }
     
-    /* Scroll indicator */
     .scroll-indicator {
       position: fixed;
       bottom: 100px;
@@ -222,8 +213,8 @@
       align-items: center;
       gap: 12px;
       transition: opacity 0.5s ease;
+      user-select: none;
     }
-    
     .scroll-indicator i {
       color: #0066b3;
       animation: bounce 2s infinite;
@@ -235,7 +226,6 @@
       60% {transform: translateY(-5px);}
     }
     
-    /* Footer */
     .footer {
       text-align: center;
       padding: 40px;
@@ -244,13 +234,11 @@
       font-size: 14px;
     }
     
-    /* Hide scrollbars for cleaner look */
     body::-webkit-scrollbar {
       width: 0px;
       background: transparent;
     }
     
-    /* Responsive adjustments */
     @media (max-width: 768px) {
       .header {
         padding: 16px 20px;
@@ -270,6 +258,14 @@
       
       .progress-container {
         width: 80%;
+      }
+      
+      video {
+        min-width: initial;
+        min-height: initial;
+        width: 100vw;
+        height: 100vh;
+        transform: translate(-50%, -50%) rotate(0deg); /* Rotate off on small screens for usability */
       }
     }
   </style>
@@ -311,7 +307,6 @@
       <h2>Elegant Design</h2>
       <p>The BMW iX represents a new era of electric mobility. With its minimalist design, luxurious materials, and spacious interior, it offers a completely new driving experience.</p>
       <p>The exterior showcases a sleek, aerodynamic profile that enhances efficiency while maintaining the distinctive BMW presence on the road.</p>
-      
       <div class="specs-grid">
         <div class="spec-card">
           <i class="fas fa-wind"></i>
@@ -335,7 +330,6 @@
       <h2>Exceptional Performance</h2>
       <p>With over 500 horsepower and all-wheel drive, the BMW iX delivers breathtaking acceleration and precise handling. The electric powertrain provides instant torque for a responsive driving experience.</p>
       <p>Advanced battery technology enables ranges of over 300 miles on a single charge, making long journeys effortless and worry-free.</p>
-      
       <div class="specs-grid">
         <div class="spec-card">
           <i class="fas fa-bolt"></i>
@@ -359,7 +353,6 @@
       <h2>Cutting-Edge Technology</h2>
       <p>The BMW iX features the latest in automotive technology, including a curved display that blends seamlessly into the cockpit, advanced driver assistance systems, and 5G connectivity.</p>
       <p>With over-the-air updates, your vehicle continuously improves, adding new features and enhancing existing ones throughout your ownership experience.</p>
-      
       <div class="specs-grid">
         <div class="spec-card">
           <i class="fas fa-desktop"></i>
@@ -384,7 +377,7 @@
     <p>BMW iX | The Ultimate Electric Driving Machine</p>
     <p>© 2023 BMW AG. The BMW name, logo, and model designations are registered trademarks.</p>
   </footer>
-
+  
   <script>
     const video = document.getElementById("myVideo");
     const progressFill = document.getElementById("progressFill");
@@ -392,114 +385,106 @@
     const scrollIndicator = document.getElementById("scrollIndicator");
     const header = document.querySelector('.header');
     const sections = document.querySelectorAll('.section');
+    const contentSection = document.querySelector('.content-section');
     
     let targetTime = 0;
     let isVideoLoaded = false;
     let videoDuration = 0;
     let animationId;
+    let ticking = false;
     let lastScrollY = 0;
     
-    // Format time display
     function formatTime(seconds) {
       const mins = Math.floor(seconds / 60);
       const secs = Math.floor(seconds % 60);
       return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
     
-    // Ultra smooth seeking function
     function ultraSmoothSeek() {
       if (!isVideoLoaded) return;
       
       const timeDiff = targetTime - video.currentTime;
-      const threshold = 0.01;
+      const threshold = 0.02; // Small threshold to avoid jitter
       
-      const smoothingFactor = 0.1;
-
+      // Use easing with smoothing factor more dynamic based on difference magnitude
+      let smoothingFactor = 0.15;
+      if (Math.abs(timeDiff) < 0.1) {
+        smoothingFactor = 0.3; // Faster catch-up when closer
+      }
+      
       if (Math.abs(timeDiff) > threshold) {
         video.currentTime += timeDiff * smoothingFactor;
       } else if (Math.abs(timeDiff) > 0) {
-        video.currentTime = targetTime;
+        video.currentTime = targetTime; // Snap when close enough
       }
       
       const progress = video.currentTime / videoDuration;
       progressFill.style.transform = `scaleX(${progress})`;
-
       timeDisplay.querySelector('span').textContent = 
         `${formatTime(video.currentTime)} / ${formatTime(videoDuration)}`;
       
       animationId = requestAnimationFrame(ultraSmoothSeek);
     }
     
-    // Video loaded event
     video.addEventListener("loadedmetadata", () => {
       videoDuration = video.duration;
       isVideoLoaded = true;
-      
       ultraSmoothSeek();
-      
-      console.log(`Video loaded: ${videoDuration.toFixed(2)}s duration`);
+      console.log(`Video loaded: ${videoDuration.toFixed(2)} seconds`);
     });
-    
-    let ticking = false;
     
     function handleScroll() {
       lastScrollY = window.scrollY;
-      
       if (!ticking) {
         requestAnimationFrame(() => {
-          // Calculate max scroll for the video playback duration (e.g., 200vh)
-          // The remaining scroll space is for the content sections.
-          const videoScrollLength = window.innerHeight * 2; // Arbitrary length for video part
-          const maxScrollForVideo = videoScrollLength - window.innerHeight; // How much scroll effectively maps to the video
+          // Define scroll range fully dedicated to video playback
+          const videoScrollHeight = window.innerHeight * 2.5; // Larger scroll to better map time
+          const maxScrollForVideo = videoScrollHeight - window.innerHeight;
           
-          let scrollPercent;
-
-          if (lastScrollY <= videoScrollLength) {
-            // During the video section, scroll maps to video time
+          let scrollPercent = 0;
+          if (lastScrollY <= videoScrollHeight) {
             scrollPercent = Math.min(lastScrollY / maxScrollForVideo, 1);
-            targetTime = Math.min(scrollPercent * videoDuration, videoDuration);
-            // Hide content sections
-            document.querySelector('.content-section').style.opacity = '0';
+            targetTime = scrollPercent * videoDuration;
+            contentSection.style.opacity = '0';
           } else {
-            // Once past the video scroll length, content sections become visible
-            targetTime = videoDuration; // Ensure video stays at the end
-            document.querySelector('.content-section').style.opacity = '1';
+            targetTime = videoDuration;
+            contentSection.style.opacity = '1';
           }
-
-          // Header background change
+          
+          // Toggle header background on scroll threshold
           if (lastScrollY > 50) {
             header.classList.add('scrolled');
           } else {
             header.classList.remove('scrolled');
           }
           
-          // Show/hide scroll indicator only when in the video section
-          if (lastScrollY < videoScrollLength - 100 && scrollPercent < 0.95) { // Hide near end of video scroll
+          // Show/hide scroll indicator for video section only
+          if (lastScrollY < videoScrollHeight - 100 && scrollPercent < 0.95) {
             scrollIndicator.style.opacity = '1';
           } else {
             scrollIndicator.style.opacity = '0';
           }
           
-          // Section animations for the content section
+          // Animate sections visibility
           sections.forEach(section => {
             const sectionTop = section.getBoundingClientRect().top;
             if (sectionTop < window.innerHeight * 0.75) {
               section.classList.add('visible');
             } else {
-              section.classList.remove('visible'); // Added to hide sections when scrolling up
+              section.classList.remove('visible');
             }
           });
           
           ticking = false;
         });
-        
         ticking = true;
       }
     }
     
     window.addEventListener("scroll", handleScroll, { passive: true });
     
-    video.addEventListener("canplay", function() {
+    video.addEventListener("canplay", () => {
+      // Autoplay muted video (mobile compatible)
       video.play().catch(e => console.log("Autoplay prevented:", e));
     });
     
@@ -508,13 +493,13 @@
     });
     
     video.addEventListener("error", (e) => {
-      console.error("Video error:", e);
+      console.error("Video playback error:", e);
     });
     
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden && animationId) {
-        cancelAnimationFrame(animationId);
-      } else if (!document.hidden && isVideoLoaded) {
+      if (document.hidden) {
+        if (animationId) cancelAnimationFrame(animationId);
+      } else if (isVideoLoaded) {
         ultraSmoothSeek();
       }
     });
@@ -522,11 +507,8 @@
     window.addEventListener("load", () => {
       window.scrollTo(0, 0);
       handleScroll();
-      
-      video.play().then(() => {
-        video.pause();
-      }).catch(e => {
-        console.log("Autoplay may be blocked, but video is loading.");
+      video.play().then(() => video.pause()).catch(() => {
+        console.log("Autoplay blocked, video ready.");
       });
     });
   </script>
